@@ -1,20 +1,20 @@
 import { Link } from "@tanstack/react-router";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-	ChevronDown,
-	ChevronRight,
-	ClipboardType,
-	Database,
-	Home,
-	Menu,
-	Network,
-	SquareFunction,
-	StickyNote,
-	Store,
-	X,
+    ChevronDown,
+    ChevronRight,
+    ClipboardType,
+    Database,
+    Home,
+    Menu,
+    Network,
+    SquareFunction,
+    StickyNote,
+    Store,
+    X,
 } from "lucide-react";
+import { useState } from "react";
 
 export default function Header() {
 	const [isOpen, setIsOpen] = useState(false);
