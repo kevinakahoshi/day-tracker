@@ -9,12 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiNewEntryRouteImport } from './routes/api/new-entry'
+import { Route as ApiEntriesYearRouteImport } from './routes/api/entries.$year'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNewEntryRoute = ApiNewEntryRouteImport.update({
+  id: '/api/new-entry',
+  path: '/api/new-entry',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiEntriesYearRoute = ApiEntriesYearRouteImport.update({
+  id: '/api/entries/$year',
+  path: '/api/entries/$year',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -25,37 +43,81 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/api/new-entry': typeof ApiNewEntryRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/entries/$year': typeof ApiEntriesYearRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/api/new-entry': typeof ApiNewEntryRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/entries/$year': typeof ApiEntriesYearRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/api/new-entry': typeof ApiNewEntryRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/entries/$year': typeof ApiEntriesYearRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/api/new-entry'
+    | '/api/auth/$'
+    | '/api/entries/$year'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/auth/$'
-  id: '__root__' | '/' | '/api/auth/$'
+  to: '/' | '/auth' | '/api/new-entry' | '/api/auth/$' | '/api/entries/$year'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/api/new-entry'
+    | '/api/auth/$'
+    | '/api/entries/$year'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  ApiNewEntryRoute: typeof ApiNewEntryRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiEntriesYearRoute: typeof ApiEntriesYearRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/new-entry': {
+      id: '/api/new-entry'
+      path: '/api/new-entry'
+      fullPath: '/api/new-entry'
+      preLoaderRoute: typeof ApiNewEntryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/entries/$year': {
+      id: '/api/entries/$year'
+      path: '/api/entries/$year'
+      fullPath: '/api/entries/$year'
+      preLoaderRoute: typeof ApiEntriesYearRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -70,7 +132,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  ApiNewEntryRoute: ApiNewEntryRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiEntriesYearRoute: ApiEntriesYearRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
