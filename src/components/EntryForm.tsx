@@ -2,7 +2,7 @@ import { Button } from '#/components/ui/button'
 import { Label } from '#/components/ui/label'
 import { Slider } from '#/components/ui/slider'
 import { Textarea } from '#/components/ui/textarea'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import React, { useState } from 'react'
 
 type DailyEntry = {
@@ -97,7 +97,7 @@ export const EntryForm = ({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
         <Label className="text-base font-semibold">
-          Date: {date && format(new Date(date), 'MMMM d, yyyy')}
+          Date: {date && format(parseISO(date), 'MMMM d, yyyy')}
         </Label>
       </div>
 
