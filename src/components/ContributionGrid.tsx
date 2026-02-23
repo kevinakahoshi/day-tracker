@@ -1,3 +1,4 @@
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '#/components/ui/tooltip'
 import { eachDayOfInterval, endOfWeek, endOfYear, format, isToday, startOfWeek, startOfYear } from 'date-fns'
 import { useMemo } from 'react'
 
@@ -94,36 +95,40 @@ export const ContributionGrid = ({
         {/* Legend */}
         <div className="flex items-center gap-2 mb-4 text-sm">
           <span>Less</span>
-          <div className="flex gap-1">
-            <div className="w-3 h-3 bg-gray-200 rounded" title="No data"></div>
-            <div className="w-3 h-3 bg-red-500 rounded" title="1 - Worst"></div>
-            <div className="w-3 h-3 bg-orange-500 rounded" title="2"></div>
-            <div className="w-3 h-3 bg-yellow-500 rounded" title="3 - Medium"></div>
-            <div className="w-3 h-3 bg-green-300 rounded" title="4"></div>
-            <div className="w-3 h-3 bg-green-700 rounded" title="5 - Best"></div>
+          <div className="flex gap-2">
+            <div className="w-4 h-4 bg-gray-200 rounded" title="No data"></div>
+            <div className="w-4 h-4 bg-red-500 rounded" title="1 - Worst"></div>
+            <div className="w-4 h-4 bg-orange-500 rounded" title="2"></div>
+            <div className="w-4 h-4 bg-yellow-500 rounded" title="3 - Medium"></div>
+            <div className="w-4 h-4 bg-green-300 rounded" title="4"></div>
+            <div className="w-4 h-4 bg-green-700 rounded" title="5 - Best"></div>
           </div>
           <span>More</span>
         </div>
 
-        {/* Day labels */}
-        <div className="flex gap-1 ml-8">
-          <div className="w-4 text-center text-xs font-medium text-gray-500">Sun</div>
-          <div className="w-4 text-center text-xs font-medium text-gray-500">Mon</div>
-          <div className="w-4 text-center text-xs font-medium text-gray-500">Tue</div>
-          <div className="w-4 text-center text-xs font-medium text-gray-500">Wed</div>
-          <div className="w-4 text-center text-xs font-medium text-gray-500">Thu</div>
-          <div className="w-4 text-center text-xs font-medium text-gray-500">Fri</div>
-          <div className="w-4 text-center text-xs font-medium text-gray-500">Sat</div>
-        </div>
+        {/* Grid with weekday headers on top and weeks as rows (better for mobile) */}
+          <TooltipProvider>
+        <div className="flex flex-col gap-3">
+          {/* Weekday headers */}
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-10" />
+            <div className="flex gap-2">
+              <div className="w-6 h-6 flex items-center justify-center text-sm text-gray-500">Sun</div>
+              <div className="w-6 h-6 flex items-center justify-center text-sm text-gray-500">Mon</div>
+              <div className="w-6 h-6 flex items-center justify-center text-sm text-gray-500">Tue</div>
+              <div className="w-6 h-6 flex items-center justify-center text-sm text-gray-500">Wed</div>
+              <div className="w-6 h-6 flex items-center justify-center text-sm text-gray-500">Thu</div>
+              <div className="w-6 h-6 flex items-center justify-center text-sm text-gray-500">Fri</div>
+              <div className="w-6 h-6 flex items-center justify-center text-sm text-gray-500">Sat</div>
+            </div>
+          </div>
 
-        {/* Grid */}
-        <div className="space-y-1">
-          {/* Month labels and grid */}
-          <div className="flex gap-1">
-            <div className="w-8"></div>
-            <div className="flex flex-wrap gap-1">
-              {weeks.map((week, weekIndex) => (
-                <div key={weekIndex} className="flex flex-col gap-1">
+          {/* Weeks rendered as horizontal rows */}
+          <div className="flex flex-col gap-2">
+            {weeks.map((week, weekIndex) => (
+              <div key={weekIndex} className="flex gap-2 items-center">
+                <div className="w-10 text-xs text-gray-400 text-right">W{weekIndex + 1}</div>
+                <div className="flex gap-2">
                   {week.map((day) => {
                     const dateStr = format(day, 'yyyy-MM-dd')
                     const entry = entriesByDate.get(dateStr)
@@ -132,32 +137,44 @@ export const ContributionGrid = ({
                     const isTodayDate = isToday(day)
 
                     return (
-                      <button
-                        key={dateStr}
-                        onClick={() => isCurrentYear && onDayClick(dateStr)}
-                        disabled={!isCurrentYear}
-                        className={`
-                          w-3 h-3 rounded-sm transition-all
-                          ${
-                            isCurrentYear
-                              ? entry
-                                ? getRatingColor(entry.rating)
-                                : 'bg-gray-200 hover:bg-gray-300'
-                              : 'bg-gray-100'
-                          }
-                          ${!isCurrentYear ? 'cursor-not-allowed' : 'cursor-pointer'}
-                          ${isSelected ? `border-2 ${entry ? getRatingColorBorder(entry.rating) : 'border-gray-400'}` : 'border border-gray-300'}
-                          ${isTodayDate ? 'ring-1 ring-offset-1 ring-blue-400' : ''}
-                        `}
-                        title={`${dateStr}${entry ? ` - Rating: ${entry.rating}` : ''}`}
-                      />
+                      <div key={dateStr} className="relative">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              onClick={() => isCurrentYear && onDayClick(dateStr)}
+                              disabled={!isCurrentYear}
+                              aria-label={`${format(day, 'MMMM d, yyyy')}${entry ? ` - Rating: ${entry.rating}` : ''}`}
+                              className={`
+                                  w-6 h-6 rounded-full transition-all
+                                ${
+                                  isCurrentYear
+                                    ? entry
+                                      ? getRatingColor(entry.rating)
+                                      : 'bg-gray-200 hover:bg-gray-300'
+                                    : 'bg-gray-100'
+                                }
+                                  ${!isCurrentYear ? 'opacity-0 pointer-events-none' : ''}
+                                ${!isCurrentYear ? 'cursor-not-allowed' : 'cursor-pointer'}
+                                ${isSelected ? `ring-2 ${entry ? getRatingColorBorder(entry.rating) : 'ring-gray-400'}` : 'border border-gray-300'}
+                                ${isTodayDate ? 'ring-1 ring-offset-1 ring-blue-400' : ''}
+                              `}
+                            />
+                          </TooltipTrigger>
+
+                          <TooltipContent side="top">
+                            {format(day, 'MMMM d, yyyy')}
+                            {entry ? ` — Rating: ${entry.rating}` : ''}
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
                     )
                   })}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
+          </TooltipProvider>
       </div>
     </div>
   )
