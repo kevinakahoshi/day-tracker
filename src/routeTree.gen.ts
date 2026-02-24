@@ -9,15 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthRouteImport } from './routes/auth'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiNewEntryRouteImport } from './routes/api/new-entry'
 import { Route as ApiEntriesYearRouteImport } from './routes/api/entries.$year'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,14 +43,14 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
   '/api/new-entry': typeof ApiNewEntryRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/entries/$year': typeof ApiEntriesYearRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
   '/api/new-entry': typeof ApiNewEntryRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/entries/$year': typeof ApiEntriesYearRoute
@@ -58,7 +58,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
   '/api/new-entry': typeof ApiNewEntryRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/entries/$year': typeof ApiEntriesYearRoute
@@ -67,16 +67,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/auth'
+    | '/login'
     | '/api/new-entry'
     | '/api/auth/$'
     | '/api/entries/$year'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/api/new-entry' | '/api/auth/$' | '/api/entries/$year'
+  to: '/' | '/login' | '/api/new-entry' | '/api/auth/$' | '/api/entries/$year'
   id:
     | '__root__'
     | '/'
-    | '/auth'
+    | '/login'
     | '/api/new-entry'
     | '/api/auth/$'
     | '/api/entries/$year'
@@ -84,7 +84,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRoute
+  LoginRoute: typeof LoginRoute
   ApiNewEntryRoute: typeof ApiNewEntryRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiEntriesYearRoute: typeof ApiEntriesYearRoute
@@ -92,11 +92,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -132,7 +132,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRoute: AuthRoute,
+  LoginRoute: LoginRoute,
   ApiNewEntryRoute: ApiNewEntryRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiEntriesYearRoute: ApiEntriesYearRoute,
