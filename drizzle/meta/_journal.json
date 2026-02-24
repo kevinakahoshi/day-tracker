@@ -8,6 +8,20 @@
       "when": 1771735406046,
       "tag": "0000_chilly_quasimodo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771912017565,
+      "tag": "0001_spotty_chronomancer",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771913084268,
+      "tag": "0002_yummy_colleen_wing",
+      "breakpoints": true
     }
   ]
 }
