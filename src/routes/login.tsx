@@ -67,15 +67,14 @@ function LoginPage() {
     }
   }
 
-  const handleGoogleSignIn = async () => {
-    setError('')
-    try {
-      await authClient.signIn.social({
-        provider: 'google',
-      })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sign in with Google')
-    }
+    const handleGoogleSignIn = async () => {
+      setError('')
+      try {
+        await authClient.signIn.social({ provider: 'google' })
+      } catch (err) {
+        console.error('Social sign-in error', err)
+        setError(err instanceof Error ? err.message : 'Failed to sign in with Google')
+      }
   }
 
   return (
