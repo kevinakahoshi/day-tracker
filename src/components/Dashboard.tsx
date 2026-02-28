@@ -121,7 +121,7 @@ export const Dashboard = () => {
           className="gap-2"
         >
           <ChevronLeft className="w-4 h-4" />
-          Previous Year
+          <span className="hidden sm:inline">Prev</span>
         </Button>
         <h1 className="text-3xl font-bold">{year}</h1>
         <Button
@@ -130,7 +130,7 @@ export const Dashboard = () => {
           disabled={year >= new Date().getFullYear()}
           className="gap-2"
         >
-          Next Year
+          <span className="hidden sm:inline">Next</span>
           <ChevronRight className="w-4 h-4" />
         </Button>
       </div>
