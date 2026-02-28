@@ -1,61 +1,66 @@
-import { Button } from '#/components/ui/button'
-import { Label } from '#/components/ui/label'
-import { Slider } from '#/components/ui/slider'
-import { Textarea } from '#/components/ui/textarea'
-import { format, parseISO } from 'date-fns'
-import React, { useState } from 'react'
+import { Button } from "#/components/ui/button";
+import { Label } from "#/components/ui/label";
+import { Slider } from "#/components/ui/slider";
+import { Textarea } from "#/components/ui/textarea";
+import { format, parseISO } from "date-fns";
+import type React from "react";
+import { useId, useState } from "react";
 
 type DailyEntry = {
-  id: number
-  userId: string
-  entryDate: string
-  rating: number
-  note: string | null
-  createdAt: Date
-  updatedAt: Date
-}
+  id: number;
+  userId: string;
+  entryDate: string;
+  rating: number;
+  note: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 type EntryFormProps = {
-  date?: string
-  onSubmit: (data: { entryDate: string; rating: number; note?: string }) => Promise<void>
-  onCancel: () => void
-  initialEntry?: DailyEntry
-  isLoading?: boolean
-}
+  date?: string;
+  onSubmit: (data: {
+    entryDate: string;
+    rating: number;
+    note?: string;
+  }) => Promise<void>;
+  onCancel: () => void;
+  initialEntry?: DailyEntry;
+  isLoading?: boolean;
+};
 
 const getRatingLabel = (rating: number): string => {
   switch (rating) {
     case 1:
-      return 'Terrible'
+      return "Terrible";
     case 2:
-      return 'Bad'
+      return "Bad";
     case 3:
-      return 'OK'
+      return "OK";
     case 4:
-      return 'Good'
+      return "Good";
     case 5:
-      return 'Excellent'
+      return "Excellent";
     default:
-      return ''
+      return "";
   }
-}
+};
 
 const getRatingColor = (rating: number): string => {
   switch (rating) {
     case 1:
-      return 'text-red-500'
+      return "text-red-500";
     case 2:
-      return 'text-orange-500'
+      return "text-orange-500";
     case 3:
-      return 'text-yellow-500'
+      return "text-yellow-500";
     case 4:
-      return 'text-green-300'
+      return "text-green-300";
     case 5:
-      return 'text-green-700'
+      return "text-green-700";
     default:
-      return 'text-gray-500'
+      return "text-gray-500";
   }
-}
+};
 
 export const EntryForm = ({
   date,
@@ -64,22 +69,24 @@ export const EntryForm = ({
   initialEntry,
   isLoading = false,
 }: EntryFormProps) => {
-  const [rating, setRating] = useState(initialEntry?.rating || 3)
-  const [note, setNote] = useState(initialEntry?.note || '')
-  const [error, setError] = useState('')
+  const [rating, setRating] = useState(initialEntry?.rating || 3);
+  const [note, setNote] = useState(initialEntry?.note || "");
+  const [error, setError] = useState("");
+  const sliderId = useId();
+  const noteId = useId();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError("");
 
     if (!date) {
-      setError('No date selected')
-      return
+      setError("No date selected");
+      return;
     }
 
     if (rating < 1 || rating > 5) {
-      setError('Rating must be between 1 and 5')
-      return
+      setError("Rating must be between 1 and 5");
+      return;
     }
 
     try {
@@ -87,28 +94,31 @@ export const EntryForm = ({
         entryDate: date,
         rating,
         note: note.trim() || undefined,
-      })
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save entry')
+      setError(err instanceof Error ? err.message : "Failed to save entry");
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
         <Label className="text-base font-semibold">
-          Date: {date && format(parseISO(date), 'MMMM d, yyyy')}
+          Date: {date && format(parseISO(date), "MMMM d, yyyy")}
         </Label>
       </div>
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="rating" className="text-lg font-semibold">
-            How are you feeling? <span className={`${getRatingColor(rating)} font-bold`}>({getRatingLabel(rating)})</span>
+          <Label htmlFor={sliderId} className="text-lg font-semibold">
+            How are you feeling?{" "}
+            <span className={`${getRatingColor(rating)} font-bold`}>
+              ({getRatingLabel(rating)})
+            </span>
           </Label>
           <div className="flex items-center justify-between gap-4">
             <Slider
-              id="rating"
+              id={sliderId}
               min={1}
               max={5}
               step={1}
@@ -125,14 +135,16 @@ export const EntryForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="note" className="text-lg font-semibold">
+          <Label htmlFor={noteId} className="text-lg font-semibold">
             Add a note (optional)
           </Label>
           <Textarea
-            id="note"
+            id={noteId}
             placeholder="What happened today? How did you feel?"
             value={note}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setNote(e.target.value)
+            }
             className="min-h-[120px] resize-none"
           />
         </div>
@@ -154,9 +166,9 @@ export const EntryForm = ({
           disabled={isLoading}
           className="bg-blue-600 hover:bg-blue-700"
         >
-          {isLoading ? 'Saving...' : 'Save'}
+          {isLoading ? "Saving..." : "Save"}
         </Button>
       </div>
     </form>
-  )
-}
+  );
+};
